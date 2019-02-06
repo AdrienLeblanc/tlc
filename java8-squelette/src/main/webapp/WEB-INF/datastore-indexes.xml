@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<datastore-indexes
+  autoGenerate="true">
+    <datastore-index kind="record" ancestor="false">
+        <property name="hello" direction="asc" />
+        <property name="foo" direction="asc" />
+    </datastore-index>
+</datastore-indexes>
+
