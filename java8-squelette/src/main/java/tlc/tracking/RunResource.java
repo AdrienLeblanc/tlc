@@ -110,14 +110,23 @@ public class RunResource extends ServerResource {
                 case "area":
                     if (parameter.getValue().contains(",")) {
                         String[] bounds = parameter.getValue().split(",");
-                        filters.add(PropertyFilter.ge("lat", parseLong(bounds[0])));
-                        filters.add(PropertyFilter.le("lat", parseLong(bounds[1])));
-                        filters.add(PropertyFilter.le("lon", parseLong(bounds[2])));
-                        filters.add(PropertyFilter.le("lon", parseLong(bounds[3])));
+                        if (parseDouble(bounds[0]) > parseDouble(bounds[1])) {
+                            String tmp = bounds[0];
+                            bounds[0] = bounds[1];
+                            bounds[1] = tmp;
+                        }
+                        if (parseDouble(bounds[2]) > parseDouble(bounds[3])) {
+                            String tmp = bounds[2];
+                            bounds[2] = bounds[3];
+                            bounds[3] = tmp;
+                        }
+                        filters.add(PropertyFilter.ge("lat", parseDouble(bounds[0])));
+                        filters.add(PropertyFilter.le("lat", parseDouble(bounds[1])));
+                        filters.add(PropertyFilter.ge("lon", parseDouble(bounds[2])));
+                        filters.add(PropertyFilter.le("lon", parseDouble(bounds[3])));
                     }
                     break;
                 case "user":
-                    System.out.println(parameter.getName() + " - " + parameter.getValue());
                     filters.add(PropertyFilter.eq(parameter.getName(), parameter.getValue()));
                     break;
                 default:
