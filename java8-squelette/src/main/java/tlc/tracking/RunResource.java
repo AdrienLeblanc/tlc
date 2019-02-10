@@ -129,13 +129,23 @@ public class RunResource extends ServerResource {
                 case "user":
                     filters.add(PropertyFilter.eq(parameter.getName(), parameter.getValue()));
                     break;
-                default:
+                case "lon":
+                case "lat":
                     if (parameter.getValue().contains(",")) {
                         String[] bounds = parameter.getValue().split(",");
                         filters.add(PropertyFilter.ge(parameter.getName(), parseDouble(bounds[0])));
                         filters.add(PropertyFilter.le(parameter.getName(), parseDouble(bounds[1])));
                     } else {
                         filters.add(PropertyFilter.eq(parameter.getName(), parseDouble(parameter.getValue())));
+                    }
+                    break;
+                default:
+                    if (parameter.getValue().contains(",")) {
+                        String[] bounds = parameter.getValue().split(",");
+                        filters.add(PropertyFilter.ge(parameter.getName(), parseLong(bounds[0])));
+                        filters.add(PropertyFilter.le(parameter.getName(), parseLong(bounds[1])));
+                    } else {
+                        filters.add(PropertyFilter.eq(parameter.getName(), parseLong(parameter.getValue())));
                     }
                     break;
             }
@@ -155,6 +165,10 @@ public class RunResource extends ServerResource {
                                 filters.get(0),
                                 batch(PropertyFilter.class, filters.subList(1, filters.size() - 1))))
                         .build();
+                System.out.println(filters.get(0));
+                for (PropertyFilter filter : filters.subList(1, filters.size() - 1)) {
+                    System.out.println(filter);
+                }
             }
         } else {
             query = Query.newEntityQueryBuilder()
