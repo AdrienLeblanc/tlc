@@ -107,42 +107,26 @@ public class RunResource extends ServerResource {
         List<PropertyFilter> filters = new LinkedList<>();
         for (Parameter parameter : form) {
             switch (parameter.getName()) {
-                case "id":
+                case "area":
                     if (parameter.getValue().contains(",")) {
                         String[] bounds = parameter.getValue().split(",");
-                        filters.add(PropertyFilter.ge(parameter.getName(), parseLong(bounds[0])));
-                        filters.add(PropertyFilter.le(parameter.getName(), parseLong(bounds[1])));
-                    } else {
-                        filters.add(PropertyFilter.eq(parameter.getName(), parseLong(parameter.getValue())));
+                        filters.add(PropertyFilter.ge("lat", parseLong(bounds[0])));
+                        filters.add(PropertyFilter.le("lat", parseLong(bounds[1])));
+                        filters.add(PropertyFilter.le("lon", parseLong(bounds[2])));
+                        filters.add(PropertyFilter.le("lon", parseLong(bounds[3])));
                     }
                     break;
                 case "user":
+                    System.out.println(parameter.getName() + " - " + parameter.getValue());
                     filters.add(PropertyFilter.eq(parameter.getName(), parameter.getValue()));
-                case "lat":
+                    break;
+                default:
                     if (parameter.getValue().contains(",")) {
                         String[] bounds = parameter.getValue().split(",");
                         filters.add(PropertyFilter.ge(parameter.getName(), parseDouble(bounds[0])));
                         filters.add(PropertyFilter.le(parameter.getName(), parseDouble(bounds[1])));
                     } else {
                         filters.add(PropertyFilter.eq(parameter.getName(), parseDouble(parameter.getValue())));
-                    }
-                    break;
-                case "lon":
-                    if (parameter.getValue().contains(",")) {
-                        String[] bounds = parameter.getValue().split(",");
-                        filters.add(PropertyFilter.ge(parameter.getName(), parseDouble(bounds[0])));
-                        filters.add(PropertyFilter.le(parameter.getName(), parseDouble(bounds[1])));
-                    } else {
-                        filters.add(PropertyFilter.eq(parameter.getName(), parseDouble(parameter.getValue())));
-                    }
-                    break;
-                case "timestamp":
-                    if (parameter.getValue().contains(",")) {
-                        String[] bounds = parameter.getValue().split(",");
-                        filters.add(PropertyFilter.ge(parameter.getName(), parseLong(bounds[0])));
-                        filters.add(PropertyFilter.le(parameter.getName(), parseLong(bounds[1])));
-                    } else {
-                        filters.add(PropertyFilter.eq(parameter.getName(), parseLong(parameter.getValue())));
                     }
                     break;
             }
